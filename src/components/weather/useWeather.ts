@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 
-const API_ACCESS_KEY = '0701ed3dbd5e9f686716e3c76cd0eb99'
-
 export type Unit = 'm' | 'f'
-export type WeatherData = {
+
+export type WeatherDataType = {
   request: {
     type: string
     query: string
@@ -41,7 +40,7 @@ export type WeatherData = {
   }
 }
 
-export type WeatherFailure = {
+export type WeatherFailureType = {
   success: false
   error: {
     code: number
@@ -50,7 +49,7 @@ export type WeatherFailure = {
   }
 }
 
-export type WeatherResponse = WeatherData | WeatherFailure
+export type WeatherResponseType = WeatherDataType | WeatherFailureType
 
 export interface UseWeatherProps {
   location: string
@@ -58,7 +57,7 @@ export interface UseWeatherProps {
 }
 
 export default function useWeather({ location, unit }: UseWeatherProps) {
-  const [data, setData] = useState<WeatherData>()
+  const [data, setData] = useState<WeatherDataType>()
   const [error, setError] = useState<Error | string>()
   const [loading, setLoading] = useState<boolean>(true)
   const [units, setUnits] = useState<Unit>(() => unit)
@@ -67,9 +66,8 @@ export default function useWeather({ location, unit }: UseWeatherProps) {
     setLoading(true)
     setError(undefined)
     setData(undefined)
-    const API_URL = new URL(
-      `http://api.weatherstack.com/current?access_key=${API_ACCESS_KEY}&query=${location}&units=${units}`,
-    )
+
+    const API_URL = `/api/weather/${encodeURIComponent(location)}/${units}`
 
     async function getWeatherData() {
       try {
@@ -77,7 +75,7 @@ export default function useWeather({ location, unit }: UseWeatherProps) {
         if (!response.ok) {
           setError(`API response not ok: ${response.statusText}`)
         } else {
-          const json = (await response.json()) as WeatherResponse
+          const json = (await response.json()) as WeatherResponseType
           if ('success' in json) {
             setError(json.error.info)
           } else {
