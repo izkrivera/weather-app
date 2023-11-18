@@ -1,10 +1,6 @@
-/**
- * @jest-environment jsdom
- */
-
 import '@testing-library/jest-dom'
 import { fireEvent, render, screen } from '@testing-library/react'
-import { mockData } from '../mockData/weather'
+import { mockData } from './mockData/weather'
 import Weather from '@/components/weather/Weather'
 
 describe('Weather', () => {
