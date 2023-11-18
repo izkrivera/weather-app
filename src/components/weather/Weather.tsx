@@ -35,12 +35,12 @@ function WeatherLoading() {
   }
 
   return context.loading ? (
-    <div
+    <h2
       className={styles.weatherLoading}
       data-testid="weather-loading"
     >
-      <strong>Loading weather data...</strong>
-    </div>
+      Loading weather data...
+    </h2>
   ) : null
 }
 
@@ -55,12 +55,12 @@ function WeatherError() {
   const isError = !loading && error
 
   return isError ? (
-    <div
+    <h2
       className={styles.weatherError}
       data-testid="weather-error"
     >
-      <strong>{error.toString()}</strong>
-    </div>
+      {error.toString()}
+    </h2>
   ) : null
 }
 
@@ -84,29 +84,26 @@ function WeatherData() {
       className={styles.weatherData}
       data-testid="weather-data"
     >
-      <h1 style={{ marginBottom: 16 }}>Current Weather</h1>
-      <h2 style={{ marginBottom: 16 }}>
-        {`Location: ${data.location.name}, ${data.location.region}, ${data.location.country}`}
-      </h2>
-      <h2 style={{ marginBottom: 16 }}>{`Date: ${new Date(
-        data.location.localtime,
-      ).toLocaleDateString()}`}</h2>
-      <h3>
-        {`Description: ${data.current.weather_descriptions[0]} `}
+      <h1 className="weather-location">
+        {`${data.location.name}, ${data.location.country}`}
+      </h1>
+      <div>
         <Image
+          className={styles.weatherIcon}
           alt="weather"
           src={data.current.weather_icons[0]}
-          height={16}
-          width={16}
-          style={{ borderRadius: '50%', verticalAlign: 'middle' }}
+          height={64}
+          width={64}
         />
-      </h3>
-      <h3>{`Temperature: ${data.current.temperature} ${
+      </div>
+      <h1>{`${data.current.temperature}${
         UnitToTemperatureAbbreviations[data.request.unit]
-      }`}</h3>
+      }`}</h1>
+      <h2>{`${data.current.weather_descriptions[0]} `}</h2>
       <h3>{`Wind: ${data.current.wind_degree}° ${data.current.wind_dir}, ${
         data.current.wind_speed
       } ${UnitToSpeedNames[data.request.unit]}`}</h3>
+      <h3>{`${new Date(data.location.localtime).toLocaleDateString()}`}</h3>
       <button
         className={styles.unitsButton}
         onClick={toggleUnit}
