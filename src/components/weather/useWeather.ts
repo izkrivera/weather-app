@@ -50,7 +50,6 @@ export type WeatherFailureType = {
 }
 
 export type WeatherResponseType = WeatherDataType | WeatherFailureType
-
 export interface UseWeatherProps {
   location: string
   unit: Unit
