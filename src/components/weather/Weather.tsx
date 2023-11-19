@@ -1,8 +1,8 @@
 import { FC, createContext, PropsWithChildren, useContext } from 'react'
 import { pickChildrenByType } from '@/utils'
 import Image from 'next/image'
-import useWeather, { Unit, WeatherDataType } from './useWeather'
-import styles from './Weather.module.css'
+import useWeather, { Unit } from './useWeather'
+import styles from './styles/Weather.module.css'
 
 type TemperatureNames = 'Celsius' | 'Fahrenheit'
 type TemperatureAbbreviations = '°C' | '°F'

@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import { fireEvent, render, screen } from '@testing-library/react'
-import { mockData } from './mockData/weather'
-import Weather from '@/components/weather/Weather'
+import mockData from './weather.data.json'
+import Weather from '@/components/Weather'
 
 describe('Weather', () => {
   it('renders component root', async () => {

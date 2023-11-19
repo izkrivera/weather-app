@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import { renderHook, waitFor } from '@testing-library/react'
-import { mockData } from './mockData/weather'
-import useWeather, { UseWeatherProps } from '@/components/weather/useWeather'
+import mockData from './weather.data.json'
+import useWeather, { UseWeatherProps } from '@/components/Weather/useWeather'
 
 type HookResultType = ReturnType<typeof useWeather>
 
