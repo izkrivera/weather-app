@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import useFetch from '@/hooks/useFetch'
 
 export type Unit = 'm' | 'f'
 
@@ -56,44 +57,28 @@ export interface UseWeatherProps {
 }
 
 export default function useWeather({ location, unit }: UseWeatherProps) {
-  const [data, setData] = useState<WeatherDataType>()
-  const [error, setError] = useState<Error | string>()
-  const [loading, setLoading] = useState<boolean>(true)
   const [units, setUnits] = useState<Unit>(() => unit)
+  const API_URL = `/api/weather/${encodeURIComponent(location)}/${units}`
+  const {
+    loading,
+    error: fetchError,
+    data: fetchData,
+    refetch,
+  } = useFetch<WeatherResponseType>(API_URL)
 
   useEffect(() => {
-    setLoading(true)
-    setError(undefined)
-    setData(undefined)
-
-    const API_URL = `/api/weather/${encodeURIComponent(location)}/${units}`
-
-    async function getWeatherData() {
-      try {
-        const response = await fetch(API_URL)
-        if (!response.ok) {
-          setError(`API response not ok: ${response.statusText}`)
-        } else {
-          const json = (await response.json()) as WeatherResponseType
-          if ('success' in json) {
-            setError(json.error.info)
-          } else {
-            setData(json)
-          }
-        }
-      } catch (e: unknown) {
-        if (typeof e === 'string') {
-          setError(e)
-        } else if (e instanceof Error) {
-          setError(e)
-        } else {
-          setError('An error ocurred fetching weather data')
-        }
-      }
-      setLoading(false)
-    }
-    getWeatherData()
+    refetch(API_URL)
   }, [location, units])
+
+  let data: WeatherDataType | undefined
+  let error: Error | string | undefined
+
+  if (fetchData && 'success' in fetchData) {
+    error = fetchData.error.info
+  } else {
+    data = fetchData
+    error = fetchError
+  }
 
   return { loading, data, error, setUnit: setUnits }
 }
